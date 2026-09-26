@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-
+import 'screens/home_screen.dart';
+import 'screens/list_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -65,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white.withOpacity(0.7), // полупрозрачный фон
+            backgroundColor: Colors.white.withValues(alpha: 0.7), // полупрозрачный фон
             elevation: 0, // убираем стандартную тень
             items: const [
               BottomNavigationBarItem(
@@ -99,24 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
 // ==== Экраны-заглушки для каждого раздела ====
 // Позже наполнишь их реальным содержимым
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-  
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Главная страница'));
-  }
-}
 
-class ListScreen extends StatelessWidget {
-  const ListScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Список покупок'));
-  }
-}
 
 class AddScreen extends StatelessWidget {
   const AddScreen({super.key});
