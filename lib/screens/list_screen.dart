@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../data/app_data.dart';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
@@ -7,41 +8,8 @@ class ListScreen extends StatefulWidget {
   State<ListScreen> createState() => _ListScreenState();
 }
 
-class ShoppingItem {
-  String name;
-  bool isChecked;
-
-  ShoppingItem({required this.name, this.isChecked = false});
-}
-
 class _ListScreenState extends State<ListScreen> {
-  final List<ShoppingItem> _items = [
-    ShoppingItem(name: 'Молоко'),
-    ShoppingItem(name: 'Хлеб'),
-    ShoppingItem(name: 'Яйца'),
-  ];
-
   final TextEditingController _controller = TextEditingController();
-
-  void _addItem(String name) {
-    if (name.trim().isEmpty) return;
-    setState(() {
-      _items.add(ShoppingItem(name: name.trim()));
-    });
-    _controller.clear();
-  }
-
-  void _toggleItem(int index) {
-    setState(() {
-      _items[index].isChecked = !_items[index].isChecked;
-    });
-  }
-
-  void _removeItem(int index) {
-    setState(() {
-      _items.removeAt(index);
-    });
-  }
 
   @override
   void dispose() {
@@ -51,60 +19,72 @@ class _ListScreenState extends State<ListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Поле ввода нового товара
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    hintText: 'Добавить товар...',
-                    border: OutlineInputBorder(),
-                  ),
-                  onSubmitted: _addItem, // добавление по Enter
-                ),
-              ),
-              const SizedBox(width: 8),
-              IconButton(
-                icon: const Icon(Icons.add_circle, size: 32),
-                onPressed: () => _addItem(_controller.text),
-              ),
-            ],
-          ),
-        ),
+    // AnimatedBuilder перестраивает этот экран каждый раз,
+    // когда AppData вызывает notifyListeners()
+    return AnimatedBuilder(
+      animation: AppData.instance,
+      builder: (context, _) {
+        final items = AppData.instance.shoppingList;
 
-        // Сам список товаров
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(bottom: 80), // отступ под панель навигации
-            itemCount: _items.length,
-            itemBuilder: (context, index) {
-              final item = _items[index];
-              return CheckboxListTile(
-                title: Text(
-                  item.name,
-                  style: TextStyle(
-                    decoration: item.isChecked
-                        ? TextDecoration.lineThrough // зачёркивание отмеченных
-                        : TextDecoration.none,
-                    color: item.isChecked ? Colors.grey : Colors.black,
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      decoration: const InputDecoration(
+                        hintText: 'Добавить товар...',
+                        border: OutlineInputBorder(),
+                      ),
+                      onSubmitted: (value) {
+                        AppData.instance.addShoppingItem(value);
+                        _controller.clear();
+                      },
+                    ),
                   ),
-                ),
-                value: item.isChecked,
-                onChanged: (_) => _toggleItem(index),
-                secondary: IconButton(
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: () => _removeItem(index),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const Icon(Icons.add_circle, size: 32),
+                    onPressed: () {
+                      AppData.instance.addShoppingItem(_controller.text);
+                      _controller.clear();
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.only(bottom: 80),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  final item = items[index];
+                  return CheckboxListTile(
+                    title: Text(
+                      item.name,
+                      style: TextStyle(
+                        decoration: item.isChecked
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        color: item.isChecked ? Colors.grey : Colors.black,
+                      ),
+                    ),
+                    value: item.isChecked,
+                    onChanged: (_) => AppData.instance.toggleShoppingItem(index),
+                    secondary: IconButton(
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () => AppData.instance.removeShoppingItem(index),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

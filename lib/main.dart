@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'screens/home_screen.dart';
 import 'screens/list_screen.dart';
+import 'screens/food_screen.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -40,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeScreen(),
     ListScreen(),
     CardsScreen(),
-    StatsScreen(),
+    FoodScreen(),
     ProfileScreen(),
   ];
 
@@ -83,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.bar_chart),
-                label: 'Статистика',
+                label: 'Еда',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
@@ -97,13 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-
-
 // ==== Экраны-заглушки для каждого раздела ====
 // Позже наполнишь их реальным содержимым
-
-
-
 
 class CardsScreen extends StatelessWidget {
   const CardsScreen({super.key});
@@ -116,14 +112,6 @@ class CardsScreen extends StatelessWidget {
 
   
 
-class StatsScreen extends StatelessWidget {
-  const StatsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Статистика'));
-  }
-}
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
