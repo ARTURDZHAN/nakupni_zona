@@ -39,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   static const List<Widget> _pages = <Widget>[
     HomeScreen(),
     ListScreen(),
-    AddScreen(),
+    CardsScreen(),
     StatsScreen(),
     ProfileScreen(),
   ];
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.add_circle),
-                label: 'Добавить',
+                label: 'Карточки',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.bar_chart),
@@ -97,20 +97,24 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+
+
 // ==== Экраны-заглушки для каждого раздела ====
 // Позже наполнишь их реальным содержимым
 
 
 
 
-class AddScreen extends StatelessWidget {
-  const AddScreen({super.key});
+class CardsScreen extends StatelessWidget {
+  const CardsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('Добавить товар'));
+    return const Center(child: Text('Карты'));
   }
 }
+
+  
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({super.key});
