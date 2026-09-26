@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../data/app_data.dart';
-import '../models/dish.dart';
+
 import 'dish_detail_screen.dart';
 
 class FoodScreen extends StatefulWidget {
@@ -13,53 +14,107 @@ class FoodScreen extends StatefulWidget {
 class _FoodScreenState extends State<FoodScreen> {
   void _showAddDishDialog() {
     final nameController = TextEditingController();
-    final ingredientsController = TextEditingController();
+    final ingredientController = TextEditingController();
+    final List<String> ingredients = [];
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Новое блюдо'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Название блюда'),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: ingredientsController,
-              decoration: const InputDecoration(
-                labelText: 'Ингредиенты (через запятую)',
-                hintText: 'Например: яйца, мука, сахар',
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('Новое блюдо'),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Название блюда',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: ingredientController,
+                            decoration: const InputDecoration(
+                              labelText: 'Ингредиент',
+                              hintText: 'Например: яйца',
+                            ),
+                            onSubmitted: (value) {
+                              if (value.trim().isNotEmpty) {
+                                setDialogState(() {
+                                  ingredients.add(value.trim());
+                                  ingredientController.clear();
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add_circle),
+                          onPressed: () {
+                            final value = ingredientController.text.trim();
+                            if (value.isNotEmpty) {
+                              setDialogState(() {
+                                ingredients.add(value);
+                                ingredientController.clear();
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    if (ingredients.isNotEmpty)
+                      SizedBox(
+                        height: 150,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: ingredients.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              dense: true,
+                              title: Text(ingredients[index]),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.close, size: 18),
+                                onPressed: () {
+                                  setDialogState(() {
+                                    ingredients.removeAt(index);
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                  ],
+                ),
               ),
-              maxLines: 3,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Отмена'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final name = nameController.text.trim();
-              final ingredients = ingredientsController.text
-                  .split(',')
-                  .map((e) => e.trim())
-                  .where((e) => e.isNotEmpty)
-                  .toList();
-
-              if (name.isNotEmpty && ingredients.isNotEmpty) {
-                AppData.instance.addDish(name, ingredients);
-                Navigator.pop(context);
-              }
-            },
-            child: const Text('Добавить'),
-          ),
-        ],
-      ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Отмена'),
+                ),
+                FilledButton(
+                  onPressed: () {
+                    final name = nameController.text.trim();
+                    if (name.isNotEmpty && ingredients.isNotEmpty) {
+                      AppData.instance.addDish(name, ingredients);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text('Добавить'),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -81,7 +136,9 @@ class _FoodScreenState extends State<FoodScreen> {
             itemCount: dishes.length,
             itemBuilder: (context, index) {
               final dish = dishes[index];
-              final available = AppData.instance.countAvailableIngredients(dish);
+              final available = AppData.instance.countAvailableIngredients(
+                dish,
+              );
               final total = dish.requiredIngredients.length;
               final isReady = available == total;
 

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'dart:ui';
+
 import 'screens/home_screen.dart';
 import 'screens/list_screen.dart';
 import 'screens/food_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -67,17 +70,13 @@ class _MyHomePageState extends State<MyHomePage> {
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white.withValues(alpha: 0.7), // полупрозрачный фон
+            backgroundColor: Colors.white.withValues(
+              alpha: 0.7,
+            ), // полупрозрачный фон
             elevation: 0, // убираем стандартную тень
             items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Главная',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                label: 'Список',
-              ),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
+              BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Список'),
               BottomNavigationBarItem(
                 icon: Icon(Icons.add_circle),
                 label: 'Карточки',
@@ -109,9 +108,6 @@ class CardsScreen extends StatelessWidget {
     return const Center(child: Text('Карты'));
   }
 }
-
-  
-
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

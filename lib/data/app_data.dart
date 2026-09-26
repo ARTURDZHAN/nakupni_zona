@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/shopping_item.dart';
-import '../../models/dish.dart';
+import '../models/shopping_item.dart';
+import '../models/dish.dart';
 
 class AppData extends ChangeNotifier {
   // Singleton — единственный экземпляр на всё приложение
