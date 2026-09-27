@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Nakupni zona',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 52, 161, 143),
+          seedColor: const Color.fromARGB(0, 219, 48, 85),
         ),
       ),
       home: const MyHomePage(title: 'Nakupní zona'),
