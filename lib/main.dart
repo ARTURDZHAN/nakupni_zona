@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:nakupni_zona/screens/cards_screen.dart';
 import 'dart:ui';
-
-import 'screens/home_screen.dart';
 import 'screens/list_screen.dart';
 import 'screens/food_screen.dart';
 
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Nakupni zona',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(0, 219, 48, 85),
+          seedColor: const Color.fromARGB(255, 226, 34, 75),
         ),
       ),
       home: const MyHomePage(title: 'Nakupní zona'),
@@ -37,57 +35,55 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0; // какая вкладка выбрана сейчас
+  int _selectedIndex = 0;
 
-  // Список экранов — каждый соответствует своей кнопке
   static const List<Widget> _pages = <Widget>[
-    HomeScreen(),
     ListScreen(),
-    CardsScreen(),
+    CardsScreen(),      // "Карточки" — экран с картами лояльности
     FoodScreen(),
-    ProfileScreen(),
+    ProfileScreen(),  // переименуем в "Настройки" ниже
   ];
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; // обновляем выбранную вкладку
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, // важно! контент будет заходить под панель
+      extendBody: true,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: _pages[_selectedIndex], // показываем текущий раздел
+      body: _pages[_selectedIndex],
       bottomNavigationBar: ClipRRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20), // сила размытия
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: BottomNavigationBar(
             currentIndex: _selectedIndex,
             onTap: _onItemTapped,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white.withValues(
-              alpha: 0.7,
-            ), // полупрозрачный фон
-            elevation: 0, // убираем стандартную тень
+            backgroundColor: Colors.white.withValues(alpha: 0.7),
+            elevation: 0,
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
-              BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Список'),
               BottomNavigationBarItem(
-                icon: Icon(Icons.add_circle),
+                icon: Icon(Icons.list),
+                label: 'Список',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.credit_card),
                 label: 'Карточки',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.bar_chart),
+                icon: Icon(Icons.local_cafe),
                 label: 'Еда',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Профиль',
+                icon: Icon(Icons.settings),
+                label: 'Настройки',
               ),
             ],
           ),
@@ -96,18 +92,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+  
+
 
 // ==== Экраны-заглушки для каждого раздела ====
 // Позже наполнишь их реальным содержимым
 
-class CardsScreen extends StatelessWidget {
-  const CardsScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Карты'));
-  }
-}
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
